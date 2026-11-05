@@ -1,0 +1,18 @@
+{
+  "name": "ResilienceGrid Coastal Response Network",
+  "short_name": "ResilienceGrid",
+  "description": "Offline-resilient coastal emergency management demonstration",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1521",
+  "theme_color": "#101d2c",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

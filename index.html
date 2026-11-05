@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101d2c">
+  <meta name="description" content="ResilienceGrid coastal emergency management demonstration">
+  <title>ResilienceGrid — Coastal Response Network</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="demo-ribbon"><span class="pulse"></span> DEMONSTRATION MODE · NOT CONNECTED TO EMERGENCY SERVICES</div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="ResilienceGrid home">
+      <span class="brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 23c5-8 10 8 16 0s11 8 16 0M4 31c5-8 10 8 16 0s11 8 16 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M20 4 9 18h22L20 4Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg></span>
+      <span><strong>Resilience<span>Grid</span></strong><small>COASTAL RESPONSE NETWORK</small></span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <button class="nav-link active" data-view="overview">Overview</button>
+      <button class="nav-link" data-view="citizen">Citizen portal</button>
+      <button class="nav-link" data-view="rescue">Field response</button>
+      <button class="nav-link" data-view="command">Command center</button>
+    </nav>
+    <div class="top-actions">
+      <span class="connection"><i></i><b id="connectionText">ONLINE</b></span>
+      <button class="icon-btn" id="contrastToggle" title="Toggle high contrast" aria-label="Toggle high contrast">◐</button>
+      <button class="avatar" title="Demo administrator">AD</button>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+  </header>
+
+  <main class="shell">
+    <section class="welcome-row">
+      <div><div class="eyebrow"><span class="live-dot"></span> COASTAL OPERATIONS / PUDUCHERRY REGION</div><h1 id="pageTitle">Situation overview</h1><p class="muted" id="pageSubtitle">A shared operating picture for a safer, more resilient coastline.</p></div>
+      <div class="welcome-right"><div class="date-chip" id="clock">--:--:--</div><button class="button button-quiet" id="lowDataToggle">↘ Low-data mode <span id="lowDataState">Off</span></button></div>
+    </section>
+
+    <section class="alert-banner">
+      <div class="alert-symbol">!</div><div><strong>Coastal watch advisory</strong><p>Demo advisory: monitor low-lying areas during the simulated high-tide window. Follow official local authority instructions in real emergencies.</p></div>
+      <span class="tag tag-amber">WATCH</span>
+    </section>
+
+    <section class="stats-grid" aria-label="Situation metrics">
+      <article class="stat-card"><div class="stat-top"><span>Active SOS reports</span><span class="stat-icon red">⌁</span></div><strong id="statSOS">04</strong><small><b class="red-text">+2</b> in the last simulated hour</small></article>
+      <article class="stat-card"><div class="stat-top"><span>People assisted</span><span class="stat-icon teal">✓</span></div><strong id="statPeople">128</strong><small><b class="teal-text">+12</b> since last update</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Response units ready</span><span class="stat-icon blue">⌖</span></div><strong id="statUnits">08</strong><small>Across 3 response zones</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Shelter capacity</span><span class="stat-icon amber">⌂</span></div><strong id="statShelter">72%</strong><small>286 of 400 spaces available/used mix</small></article>
+    </section>
+
+    <section class="content-grid overview-view" id="overviewView">
+      <div class="panel map-panel">
+        <div class="panel-heading"><div><div class="eyebrow">GEOSPATIAL INTELLIGENCE</div><h2>Coastal incident map</h2></div><button class="button button-quiet button-small" id="centerMap">◎ Recenter</button></div>
+        <div class="map-legend"><span><i class="legend-dot critical"></i> Critical</span><span><i class="legend-dot warning"></i> Warning</span><span><i class="legend-dot safe"></i> Safe shelter</span><span><i class="legend-dot unit"></i> Response unit</span></div>
+        <div class="map-wrap" id="mapWrap">
+          <div class="map-grid"></div><div class="map-water"></div>
+          <svg class="coastline" viewBox="0 0 900 470" preserveAspectRatio="none" aria-hidden="true"><path d="M610 -10 C570 45 660 80 600 130 S640 210 570 260 S610 350 530 490" fill="none" stroke="#d6c8a8" stroke-width="32"/><path d="M610 -10 C570 45 660 80 600 130 S640 210 570 260 S610 350 530 490" fill="none" stroke="#a99d7e" stroke-width="2" stroke-dasharray="5 7"/></svg>
+          <div class="map-label label-sea">BAY OF BENGAL</div><div class="map-label label-town">PUDUCHERRY</div><div class="map-label label-north">LAWSPET</div><div class="map-label label-south">ARIYANKUPPAM</div>
+          <div class="map-road road-one"></div><div class="map-road road-two"></div><div class="map-road road-three"></div>
+          <div id="mapMarkers"></div>
+          <div class="map-scale">N ↑ &nbsp; 2 km</div>
+          <div class="map-note">Illustrative map · sample locations only</div>
+        </div>
+        <div class="map-footer"><span><i class="live-dot"></i> Local demo feed active</span><span id="lastUpdated">Updated just now</span></div>
+      </div>
+      <div class="side-stack">
+        <div class="panel">
+          <div class="panel-heading"><div><div class="eyebrow">PRIORITY QUEUE</div><h2>Recent incidents</h2></div><button class="text-button" data-go="command">View all →</button></div>
+          <div id="incidentPreview" class="incident-list"></div>
+        </div>
+        <div class="panel resource-panel">
+          <div class="panel-heading"><div><div class="eyebrow">FIELD READINESS</div><h2>Response resources</h2></div><span class="tag tag-teal">DEMO DATA</span></div>
+          <div class="resource-row"><span class="resource-icon">◈</span><div class="resource-info"><b>Rescue boats</b><small>Water evacuation</small></div><strong>3 / 5</strong><div class="mini-bar"><i style="width:60%"></i></div></div>
+          <div class="resource-row"><span class="resource-icon">✚</span><div class="resource-info"><b>Medical teams</b><small>First aid & triage</small></div><strong>2 / 3</strong><div class="mini-bar"><i style="width:66%"></i></div></div>
+          <div class="resource-row"><span class="resource-icon">▣</span><div class="resource-info"><b>Supply vehicles</b><small>Food & essentials</small></div><strong>3 / 4</strong><div class="mini-bar"><i style="width:75%"></i></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="portal-grid hidden" id="citizenView">
+      <div class="panel citizen-intro">
+        <div class="eyebrow">CITIZEN LAST-MILE PORTAL</div><h2>Help us understand what's happening near you.</h2><p class="muted">Send a local demo report, request assistance, or check the latest advisory. Reports are saved on this device and can queue offline.</p>
+        <div class="sos-card"><div><span class="eyebrow">IMMEDIATE DANGER?</span><h3>Request urgent assistance</h3><p>This demo records an SOS locally. It does not contact emergency services.</p></div><button class="sos-button" id="sosButton"><span>!</span> SEND DEMO SOS</button></div>
+        <div class="tip-row"><span>ⓘ</span><p><b>In a real emergency:</b> contact your local emergency number and follow official evacuation guidance. Do not wait for this demonstration website.</p></div>
+      </div>
+      <form class="panel report-form" id="reportForm">
+        <div class="panel-heading"><div><div class="eyebrow">COMMUNITY INTELLIGENCE</div><h2>Submit an incident report</h2></div><span class="tag tag-blue">LOCAL SAVE</span></div>
+        <label>Your report type<select id="reportType"><option>Flood water level</option><option>Structural damage</option><option>People stranded</option><option>Road blocked</option><option>Medical assistance</option></select></label>
+        <fieldset><legend>Water depth</legend><div class="depth-options"><label><input type="radio" name="depth" value="Ankle" checked><span>🦶<b>Ankle</b><small>Low</small></span></label><label><input type="radio" name="depth" value="Knee"><span>◒<b>Knee</b><small>Moderate</small></span></label><label><input type="radio" name="depth" value="Waist"><span>◉<b>Waist</b><small>High</small></span></label><label><input type="radio" name="depth" value="Chest"><span>⬆<b>Chest</b><small>Critical</small></span></label></div></fieldset>
+        <div class="form-two"><label>People affected<input id="headcount" type="number" min="0" max="999" value="1"></label><label>Nearest landmark<input id="landmark" maxlength="80" placeholder="e.g. Beach Road junction"></label></div>
+        <label>Additional details<textarea id="details" rows="3" maxlength="500" placeholder="Describe what you can see…"></textarea></label>
+        <div class="form-two"><label>Location coordinates<input id="coordinates" placeholder="Not captured" readonly></label><button class="button button-outline locate-button" type="button" id="locateButton">◎ Use my location</button></div>
+        <label class="upload-box">＋ Add a photo (optional)<input id="photoInput" type="file" accept="image/*" capture="environment"><small id="photoName">Image stays on this device in demo mode.</small></label>
+        <button class="button button-primary button-wide" type="submit">Save incident report <span>→</span></button>
+        <p class="form-footnote">Reports are stored in this browser only. Avoid submitting sensitive personal information.</p>
+      </form>
+    </section>
+
+    <section class="portal-grid hidden" id="rescueView">
+      <div class="panel">
+        <div class="eyebrow">FIELD OPERATIONS</div><h2>My response tasks</h2><p class="muted">A lightweight field view for response teams. Changes are stored locally in this browser.</p>
+        <div id="rescueTasks" class="task-list"></div>
+      </div>
+      <div class="panel">
+        <div class="eyebrow">FIELD CHECK-IN</div><h2>Verify a location</h2>
+        <p class="muted">Add an observation to a sample incident. This does not transmit data to a command center.</p>
+        <form id="verifyForm" class="stack-form">
+          <label>Incident<select id="verifyIncident"></select></label>
+          <label>Observed conditions<select id="verifyCondition"><option>Conditions match report</option><option>Water level lower than reported</option><option>Water level higher than reported</option><option>Access route blocked</option><option>Unable to verify</option></select></label>
+          <label>Field notes<textarea id="verifyNotes" rows="3" placeholder="Add concise field observations"></textarea></label>
+          <button class="button button-primary" type="submit">Save field verification</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="command-view hidden" id="commandView">
+      <div class="command-toolbar"><div><div class="eyebrow">INCIDENT MANAGEMENT</div><h2>Command center</h2><p class="muted">Review, verify and dispatch sample incidents.</p></div><button class="button button-primary" id="addSample">＋ Generate sample incident</button></div>
+      <div class="command-stats"><div class="mini-stat"><span>Pending verification</span><b id="pendingCount">0</b></div><div class="mini-stat"><span>Dispatched</span><b id="dispatchedCount">0</b></div><div class="mini-stat"><span>Resolved</span><b id="resolvedCount">0</b></div></div>
+      <div class="panel">
+        <div class="panel-heading"><div><div class="eyebrow">TRIAGE & VALIDATION</div><h2>Incident verification queue</h2></div><select id="statusFilter" class="filter-select"><option value="All">All incidents</option><option>Unverified</option><option>Verified</option><option>Dispatched</option><option>En Route</option><option>Resolved</option></select></div>
+        <div class="table-wrap"><table><thead><tr><th>Incident</th><th>Location</th><th>Severity</th><th>Confidence</th><th>Status</th><th>Action</th></tr></thead><tbody id="incidentTable"></tbody></table></div>
+      </div>
+      <div class="dispatch-grid">
+        <div class="panel"><div class="eyebrow">RESOURCE ALLOCATION</div><h2>Dispatch a response unit</h2><form id="dispatchForm" class="stack-form"><label>Incident<select id="dispatchIncident"></select></label><label>Response unit<select id="dispatchUnit"><option>Rescue Boat 02</option><option>Medical Team 01</option><option>Supply Vehicle 03</option><option>Rescue Boat 04</option></select></label><button class="button button-primary" type="submit">Assign unit →</button></form></div>
+        <div class="panel"><div class="eyebrow">OPERATIONAL NOTES</div><h2>Demo data integrity</h2><ul class="notes-list"><li>GPS and timestamps are browser-provided when permission is granted.</li><li>Duplicate checks use an approximate 50 m grid and 10-minute window.</li><li>Confidence is a demonstration heuristic, not an AI assessment.</li><li>No real sensor feeds, dispatch network or rescue agency is connected.</li></ul></div>
+      </div>
+    </section>
+
+    <footer><span>© 2026 ResilienceGrid · Community resilience, connected.</span><span><i class="live-dot"></i> Local simulation active · <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages deployment</a></span></footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog id="incidentDialog" class="incident-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form><div id="dialogContent"></div></dialog>
+  <script src="./app.js"></script>
+</body>
+</html>
